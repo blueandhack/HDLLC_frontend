@@ -1,12 +1,21 @@
 import "./App.css";
 import { useEffect, useState } from "react";
-import Login from "./Login";
+import Login from "./pages/Login";
 
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Dashboard from "./Dashboard";
-import Home from "./Home";
-import Signup from "./Signup";
-import Products from "./Products";
+import {
+  BrowserRouter,
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import Home from "./pages/Home";
+import Signup from "./pages/Signup";
+import DashboardProducts from "./pages/dashboard/Products";
+import Products from "./pages/Products";
+import Product from "./pages/Product";
+import { CartProvider } from "./CartContext";
+import Cart from "./pages/Cart";
+import Header from "./components/Header";
 
 const router = createBrowserRouter([
   {
@@ -15,7 +24,39 @@ const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <Home />,
+    element: (
+      <>
+        <Header />
+        <Home />
+      </>
+    ),
+  },
+  {
+    path: "/Cart",
+    element: (
+      <>
+        <Header />
+        <Cart />
+      </>
+    ),
+  },
+  {
+    path: "/products",
+    element: (
+      <>
+        <Header />
+        <Products />
+      </>
+    ),
+  },
+  {
+    path: "/product/:id",
+    element: (
+      <>
+        <Header />
+        <Product />
+      </>
+    ),
   },
   {
     path: "/dashboard",
@@ -23,7 +64,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard/products",
-    element: <Products />,
+    element: <DashboardProducts />,
   },
   {
     path: "/signup",
@@ -33,6 +74,7 @@ const router = createBrowserRouter([
 
 function App() {
   const [loading, setLoading] = useState(true);
+  const [cart, setCart] = useState([]);
 
   const [showDashboard, setShowDashboard] = useState(false);
 
@@ -64,7 +106,25 @@ function App() {
     checkToken();
   }, []);
 
-  return <RouterProvider router={router} />;
+  useEffect(() => {
+    // check if cart in local storage
+    const cart = localStorage.getItem("cart");
+    if (cart) {
+      // set cart context
+      setCart(JSON.parse(cart));
+    } else {
+      // set cart context
+      setCart([]);
+    }
+  }, []);
+
+  return (
+    <>
+      <CartProvider>
+        <RouterProvider router={router} />
+      </CartProvider>
+    </>
+  );
 }
 
 export default App;

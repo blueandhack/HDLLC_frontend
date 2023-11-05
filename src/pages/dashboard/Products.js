@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import ProductForm from "./components/ProductForm";
+import ProductForm from "../../components/ProductForm";
 
 function Products() {
   const [pageIndex, setPageIndex] = useState(0);
