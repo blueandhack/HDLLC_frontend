@@ -16,6 +16,9 @@ import Product from "./pages/Product";
 import { CartProvider } from "./CartContext";
 import Cart from "./pages/Cart";
 import Header from "./components/Header";
+import Checkout from "./pages/Checkout";
+import Successful from "./pages/Successful";
+import AuthContextProvider from "./AuthContext";
 
 const router = createBrowserRouter([
   {
@@ -55,6 +58,24 @@ const router = createBrowserRouter([
       <>
         <Header />
         <Product />
+      </>
+    ),
+  },
+  {
+    path: "/checkout",
+    element: (
+      <>
+        <Header />
+        <Checkout />
+      </>
+    ),
+  },
+  {
+    path: "/successful",
+    element: (
+      <>
+        <Header />
+        <Successful />
       </>
     ),
   },
@@ -120,9 +141,11 @@ function App() {
 
   return (
     <>
-      <CartProvider>
-        <RouterProvider router={router} />
-      </CartProvider>
+      <AuthContextProvider>
+        <CartProvider>
+          <RouterProvider router={router} />
+        </CartProvider>
+      </AuthContextProvider>
     </>
   );
 }

@@ -1,9 +1,12 @@
 import { useEffect, useContext } from "react";
 import { CartContext } from "../CartContext";
+import { useNavigate } from "react-router-dom";
 
 function Cart() {
   const { cartItems, addToCart, removeFromCart, clearCart, getCartTotal } =
     useContext(CartContext);
+
+  const navigate = useNavigate();
 
   return (
     <div>
@@ -55,7 +58,7 @@ function Cart() {
         <button
           className="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
           onClick={() => {
-            alert("Checkout not implemented yet");
+            navigate("/checkout");
           }}
         >
           Checkout

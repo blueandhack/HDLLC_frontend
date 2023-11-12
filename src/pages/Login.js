@@ -1,30 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../AuthContext";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const navigate = useNavigate();
+
+  const { token, login: loginFunc } = useContext(AuthContext);
+
   const login = async () => {
-    // call login api
-    const response = await fetch("http://localhost:3001/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    });
-    const data = await response.json();
-    console.log(data);
-    if (data.message === "success") {
-      // redirect to dashboard
-      localStorage.setItem("token", data.token);
-      setPassword("");
-    }
+    loginFunc(email, password);
   };
+
+  useEffect(() => {
+    if (token !== null && token !== "null") {
+      navigate("/");
+    }
+  }, [token, navigate]);
 
   return (
     <div className="App">
