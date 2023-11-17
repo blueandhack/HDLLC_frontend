@@ -1,24 +1,22 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Login from "./pages/Login";
 
-import {
-  BrowserRouter,
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import DashboardProducts from "./pages/dashboard/Products";
 import Products from "./pages/Products";
 import Product from "./pages/Product";
-import { CartProvider } from "./CartContext";
+
 import Cart from "./pages/Cart";
 import Header from "./components/Header";
 import Checkout from "./pages/Checkout";
 import Successful from "./pages/Successful";
-import AuthContextProvider from "./AuthContext";
+
+import Orders from "./pages/Orders";
+import { AuthContext } from "./AuthContext";
 
 const router = createBrowserRouter([
   {
@@ -80,6 +78,15 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/orders",
+    element: (
+      <>
+        <Header />
+        <Orders />
+      </>
+    ),
+  },
+  {
     path: "/dashboard",
     element: <Dashboard />,
   },
@@ -99,11 +106,12 @@ function App() {
 
   const [showDashboard, setShowDashboard] = useState(false);
 
+  const { token } = useContext(AuthContext);
+
   const checkToken = async () => {
     setLoading(true);
-    const token = localStorage.getItem("token");
 
-    if (!token) {
+    if (!token || token === "null" || token === null) {
       setLoading(false);
       return;
     }
@@ -141,11 +149,7 @@ function App() {
 
   return (
     <>
-      <AuthContextProvider>
-        <CartProvider>
-          <RouterProvider router={router} />
-        </CartProvider>
-      </AuthContextProvider>
+      <RouterProvider router={router} />
     </>
   );
 }

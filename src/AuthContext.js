@@ -6,7 +6,11 @@ const AuthContextProvider = (props) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
 
   useEffect(() => {
-    localStorage.setItem("token", token);
+    if (token === null) {
+      localStorage.removeItem("token");
+    } else {
+      localStorage.setItem("token", token);
+    }
   }, [token]);
 
   const login = async (email, password) => {
